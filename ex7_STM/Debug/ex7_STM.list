@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  00020030  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000083b2  00000000  00000000  00020059  2**0
+ 12 .debug_info   0000839f  00000000  00000000  00020059  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00001568  00000000  00000000  0002840b  2**0
+ 13 .debug_abbrev 00001568  00000000  00000000  000283f8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000958  00000000  00000000  00029978  2**3
+ 14 .debug_aranges 00000958  00000000  00000000  00029960  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000008b0  00000000  00000000  0002a2d0  2**3
+ 15 .debug_ranges 000008b0  00000000  00000000  0002a2b8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  0001625a  00000000  00000000  0002ab80  2**0
+ 16 .debug_macro  0001625a  00000000  00000000  0002ab68  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000931f  00000000  00000000  00040dda  2**0
+ 17 .debug_line   0000931d  00000000  00000000  00040dc2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00081d62  00000000  00000000  0004a0f9  2**0
+ 18 .debug_str    00081d62  00000000  00000000  0004a0df  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  000cbe5b  2**0
+ 19 .comment      00000053  00000000  00000000  000cbe41  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00002688  00000000  00000000  000cbeb0  2**2
+ 20 .debug_frame  00002688  00000000  00000000  000cbe94  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -359,10 +359,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int hour = 15, minute = 4, second = 50;
+  int hour = 15, minute = 8, second = 50;
  800032c:	230f      	movs	r3, #15
  800032e:	60fb      	str	r3, [r7, #12]
- 8000330:	2304      	movs	r3, #4
+ 8000330:	2308      	movs	r3, #8
  8000332:	60bb      	str	r3, [r7, #8]
  8000334:	2332      	movs	r3, #50	; 0x32
  8000336:	607b      	str	r3, [r7, #4]
@@ -371,15 +371,15 @@ int main(void)
  800033c:	f7ff ffb4 	bl	80002a8 <setTimer1>
   while (1)
   {
+	  updateClockBuffer(hour, minute);
+ 8000340:	68b9      	ldr	r1, [r7, #8]
+ 8000342:	68f8      	ldr	r0, [r7, #12]
+ 8000344:	f7ff ff74 	bl	8000230 <updateClockBuffer>
 	  if (timer1_flag == 1) {
- 8000340:	4b17      	ldr	r3, [pc, #92]	; (80003a0 <main+0x90>)
- 8000342:	681b      	ldr	r3, [r3, #0]
- 8000344:	2b01      	cmp	r3, #1
- 8000346:	d123      	bne.n	8000390 <main+0x80>
-		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
- 8000348:	2120      	movs	r1, #32
- 800034a:	4816      	ldr	r0, [pc, #88]	; (80003a4 <main+0x94>)
- 800034c:	f000 fd56 	bl	8000dfc <HAL_GPIO_TogglePin>
+ 8000348:	4b15      	ldr	r3, [pc, #84]	; (80003a0 <main+0x90>)
+ 800034a:	681b      	ldr	r3, [r3, #0]
+ 800034c:	2b01      	cmp	r3, #1
+ 800034e:	d1f7      	bne.n	8000340 <main+0x30>
 		  second++;
  8000350:	687b      	ldr	r3, [r7, #4]
  8000352:	3301      	adds	r3, #1
@@ -420,15 +420,14 @@ int main(void)
  8000380:	2110      	movs	r1, #16
  8000382:	4808      	ldr	r0, [pc, #32]	; (80003a4 <main+0x94>)
  8000384:	f000 fd3a 	bl	8000dfc <HAL_GPIO_TogglePin>
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+ 8000388:	2120      	movs	r1, #32
+ 800038a:	4806      	ldr	r0, [pc, #24]	; (80003a4 <main+0x94>)
+ 800038c:	f000 fd36 	bl	8000dfc <HAL_GPIO_TogglePin>
 		  setTimer1(1000);
- 8000388:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
- 800038c:	f7ff ff8c 	bl	80002a8 <setTimer1>
-	  }
+ 8000390:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+ 8000394:	f7ff ff88 	bl	80002a8 <setTimer1>
 	  updateClockBuffer(hour, minute);
- 8000390:	68b9      	ldr	r1, [r7, #8]
- 8000392:	68f8      	ldr	r0, [r7, #12]
- 8000394:	f7ff ff4c 	bl	8000230 <updateClockBuffer>
-	  if (timer1_flag == 1) {
  8000398:	e7d2      	b.n	8000340 <main+0x30>
  800039a:	bf00      	nop
  800039c:	20000058 	.word	0x20000058
@@ -872,7 +871,6 @@ void update7SEG(int index){
 
 08000640 <HAL_TIM_PeriodElapsedCallback>:
 
-int counter = 100;
 int led_counter = 25;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
  8000640:	b580      	push	{r7, lr}
