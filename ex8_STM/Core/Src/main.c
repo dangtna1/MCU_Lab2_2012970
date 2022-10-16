@@ -189,7 +189,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int hour = 15, minute = 4, second = 50;
+  int hour = 15, minute = 8, second = 50;
   setTimer1(1000);
   setTimer2(1000);
   while (1)
@@ -200,7 +200,7 @@ int main(void)
 		  setTimer2(1000);
 	  }
 	  if (timer1_flag == 1) {
-		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+
 		  second++;
 		  if(second >= 60) {
 			  second = 0;
@@ -213,6 +213,7 @@ int main(void)
 		  if(hour>= 24) {
 			  hour = 0;
 		  }
+		  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
 		  setTimer1(1000);
 	  }
@@ -348,8 +349,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
-//	timer1_run();
-////	timer2_run();
 	timer_run();
 }
 /* USER CODE END 4 */
