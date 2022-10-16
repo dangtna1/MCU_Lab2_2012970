@@ -283,6 +283,8 @@ void update7SEG(int index){
 			index_led = 0;
 			break;
 		}
+		default:
+			HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN1_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
 	}
 }
 
