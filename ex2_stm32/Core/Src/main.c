@@ -218,17 +218,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, DOT_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |EN3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
+                          |EN2_Pin|EN3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SEG0_Pin|SEG1_Pin|SEG2_Pin|SEG3_Pin
                           |SEG4_Pin|SEG5_Pin|SEG6_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : DOT_Pin EN0_Pin EN1_Pin EN2_Pin
-                           EN3_Pin */
-  GPIO_InitStruct.Pin = DOT_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |EN3_Pin;
+  /*Configure GPIO pins : DOT_Pin LED_RED_Pin EN0_Pin EN1_Pin
+                           EN2_Pin EN3_Pin */
+  GPIO_InitStruct.Pin = DOT_Pin|LED_RED_Pin|EN0_Pin|EN1_Pin
+                          |EN2_Pin|EN3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -246,15 +246,19 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter = 100;
+int led_red_counter = 100;
+int led_7seg_counter = 50;
 int state = 1;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
-		counter--;
-		if(counter <= 0){
-			counter = 100;
+		led_red_counter--;
+		led_7seg_counter--;
+		if(led_red_counter <= 0){
+		    led_red_counter = 100;
 			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+			HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 		}
-		if(counter == 50 || counter == 0){
+		if(led_7seg_counter <= 0){
+			led_7seg_counter = 50;
 			switch (state){
 				case 1:{
 					HAL_GPIO_WritePin(GPIOA, EN1_Pin|EN2_Pin|EN3_Pin, GPIO_PIN_SET);
@@ -280,7 +284,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
 				case 4:{
 					HAL_GPIO_WritePin(GPIOA, EN0_Pin|EN2_Pin|EN1_Pin, GPIO_PIN_SET);
 					HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
-					display7SEG(segmentNumber[1]);
+					display7SEG(segmentNumber[0]);
 					state = 1;
 					break;
 				}
