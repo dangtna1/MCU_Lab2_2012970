@@ -25,6 +25,8 @@
 #include "software_timer.h"
 #include "global.h"
 #include "fsm_automatic.h"
+#include "fsm_manual.h"
+#include "button.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +102,7 @@ int main(void)
   status = INIT;
   while (1)
   {
+	  fsm_manual_run();
 	  fsm_automatic_run();
     /* USER CODE END WHILE */
 
@@ -198,10 +201,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_GREEN_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : Button1_Pin */
+  GPIO_InitStruct.Pin = Button1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(Button1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_RED_Pin LED_GREEN_Pin LED_YELLOW_Pin */
   GPIO_InitStruct.Pin = LED_RED_Pin|LED_GREEN_Pin|LED_YELLOW_Pin;
@@ -215,6 +225,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
 	timerRun();
+	getKeyInput();
 }
 /* USER CODE END 4 */
 

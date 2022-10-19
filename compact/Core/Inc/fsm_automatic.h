@@ -10,7 +10,6 @@
 
 #include "global.h"
 #include "main.h"
-#include "software_timer.h"
 
 void fsm_automatic_run();
 
